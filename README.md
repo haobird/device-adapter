@@ -51,7 +51,7 @@ docker-compose up --force-recreate --build
 
 ## 目录文件结构
 
-
+```
 ├── README.md           # 说明文件
 ├── go.mod              # go mod
 ├── main.go             # 服务启动文件
@@ -70,3 +70,5 @@ docker-compose up --force-recreate --build
 ├── utils               # 辅助函数
 │   ├── time.go         # 时间函数
 │   ├── trans.go        # 转换函数
+
+```

@@ -1,0 +1,73 @@
+# github.com/BurntSushi/toml v0.3.1
+## explicit
+# github.com/assembla/cony v0.3.2
+github.com/assembla/cony
+# github.com/gin-contrib/sse v0.1.0
+github.com/gin-contrib/sse
+# github.com/gin-gonic/gin v1.7.2
+## explicit
+github.com/gin-gonic/gin
+github.com/gin-gonic/gin/binding
+github.com/gin-gonic/gin/internal/bytesconv
+github.com/gin-gonic/gin/internal/json
+github.com/gin-gonic/gin/render
+# github.com/go-playground/locales v0.13.0
+github.com/go-playground/locales
+github.com/go-playground/locales/currency
+# github.com/go-playground/universal-translator v0.17.0
+github.com/go-playground/universal-translator
+# github.com/go-playground/validator/v10 v10.4.1
+github.com/go-playground/validator/v10
+# github.com/golang/protobuf v1.3.3
+github.com/golang/protobuf/proto
+# github.com/haobird/fixpool v0.1.0
+## explicit
+github.com/haobird/fixpool
+# github.com/haobird/gormq v0.0.0-20210526101019-ad4fb22db9af
+## explicit
+github.com/haobird/gormq
+# github.com/haobird/goutils v0.0.0-20210615115033-f26c60c931ed
+## explicit
+github.com/haobird/goutils
+# github.com/haobird/logger v0.0.0-20210518023245-528df6ad53eb
+## explicit
+github.com/haobird/logger
+# github.com/json-iterator/go v1.1.9
+github.com/json-iterator/go
+# github.com/leodido/go-urn v1.2.0
+github.com/leodido/go-urn
+# github.com/mattn/go-isatty v0.0.12
+github.com/mattn/go-isatty
+# github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421
+github.com/modern-go/concurrent
+# github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742
+github.com/modern-go/reflect2
+# github.com/segmentio/fasthash v1.0.3
+github.com/segmentio/fasthash/fnv1a
+# github.com/sirupsen/logrus v1.8.1
+github.com/sirupsen/logrus
+# github.com/streadway/amqp v1.0.0
+github.com/streadway/amqp
+# github.com/teris-io/shortid v0.0.0-20201117134242-e59966efd125
+## explicit
+github.com/teris-io/shortid
+# github.com/tidwall/gjson v1.8.0
+## explicit
+github.com/tidwall/gjson
+# github.com/tidwall/match v1.0.3
+github.com/tidwall/match
+# github.com/tidwall/pretty v1.1.0
+github.com/tidwall/pretty
+# github.com/ugorji/go/codec v1.1.7
+github.com/ugorji/go/codec
+# golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
+golang.org/x/crypto/sha3
+# golang.org/x/sys v0.0.0-20210514084401-e8d321eab015
+golang.org/x/sys/cpu
+golang.org/x/sys/internal/unsafeheader
+golang.org/x/sys/unix
+golang.org/x/sys/windows
+# gopkg.in/natefinch/lumberjack.v2 v2.0.0
+gopkg.in/natefinch/lumberjack.v2
+# gopkg.in/yaml.v2 v2.2.8
+gopkg.in/yaml.v2

@@ -4,6 +4,9 @@ services:
         image: golang:1.16-stretch
         container_name: face
         restart: always
+        ports:
+            - "3570:3570"
+            - "9081:9081"
         volumes:
             - ./:/opt
         working_dir: /opt

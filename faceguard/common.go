@@ -8,7 +8,7 @@ import (
 	"syscall"
 
 	"github.com/haobird/fixpool"
-	"github.com/haobird/goutils"
+	"github.com/haobird/logger"
 )
 
 // 连接内容的几种状态
@@ -29,9 +29,16 @@ var (
 	sdk      = &Sdk{}
 	msgChans = make(map[string]chan string)
 	mybridge bridge.Bridge
-	lifeSpan = 60 // 单位 秒
-	wpool    = fixpool.New(20)
+	lifeSpan = 60              // 单位 秒
+	wpool    = fixpool.New(20) // 设备任务池
+	tpool    = fixpool.New(20) // 请求任务池
 )
+
+//Message 消息
+type Message struct {
+	client *Client
+	packet *Package
+}
 
 func Init() {
 	// 加载 配置文件
@@ -50,29 +57,49 @@ func Init() {
 	keepAlive()
 }
 
-// BusinessHandler 处理 业务逻辑
-func BusinessHandler(packet *Package) {
-	if packet.MessageType == PubAck {
-		requestID := packet.RequestID
-		if ch, ok := msgChans[requestID]; ok {
-			ch <- string(packet.Data)
-		}
-	}
-	// fmt.Println(body)
-	ele := &bridge.Element{
-		MessageType: packet.MessageType,
-		RequestID:   packet.RequestID,
-		Timestamp:   goutils.Int64(packet.RequestID),
-		ClientID:    packet.ClientID,
-		Topic:       packet.Topic,
-		Data:        string(packet.Data),
-	}
-	mybridge.Publish(ele)
+// ProcessCommand 处理命令
+func ProcessCommand(c *Client, p []byte) {
+	wpool.Submit(c.ID, func() {
+		c.Write(p)
+	})
 }
 
-// 处理 客户端 关闭逻辑
-func BeforeCloseHandler(clientid string) {
-	manager.DeleteClient(clientid)
+// ProcessDeviceData 处理数据
+func ProcessDeviceData(c *Client, p []byte) {
+	logger.Debugf("client %s ProcessMessage %s", c.ID, string(p))
+	// 解析数据包
+	packet, err := sdk.HandlePacket(p)
+	if err != nil {
+		logger.Errorf("client %s ProcessMessage error:%s", c.ID, err)
+		return
+	}
+	msg := Message{
+		client: c,
+		packet: packet,
+	}
+	ProcessMessage(msg)
+}
+
+// 处理消息
+func ProcessMessage(msg Message) {
+	c := msg.client
+	packet := msg.packet
+
+	// 基于消息内容 进行 相应的处理
+	messageType := packet.MessageType
+	switch messageType {
+	case Connect:
+		logger.Infof("[%s] 设备Register ", c.ID)
+		RegisterHandler(c)
+	case PubAck:
+		PubAckHandler(packet)
+	case Publish:
+		PublishHandler(packet)
+	case Heart:
+		HeartHandler(c)
+	case Disconnect:
+		DisconnectHandler(c)
+	}
 }
 
 func keepAlive() {

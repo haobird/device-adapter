@@ -103,7 +103,8 @@ func AsyncReq(buf []byte) (int, string, error) {
 	content := sdk.Trans(pack)
 	// fmt.Println(string(content))
 	// fmt.Println("字符串长度", len(string(content)))
-	err = cli.Write([]byte(content))
+	// err = cli.Write([]byte(content))
+	ProcessCommand(cli, []byte(content))
 
 	if err != nil {
 		return 2, "", err

@@ -2,7 +2,6 @@ package faceguard
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"sync"
 	"time"
@@ -58,13 +57,12 @@ type Client struct {
 func NewClient(key string, conn *ProtoConn) *Client {
 	ctx, cancelFunc := context.WithCancel(context.Background())
 	return &Client{
-		ID:                 key,
-		conn:               conn,
-		keepalive:          lifeSpan,
-		wmsgs:              make(chan []byte, 100),
-		beforeCloseHandler: BeforeCloseHandler,
-		ctx:                ctx,
-		cancelFunc:         cancelFunc,
+		ID:         key,
+		conn:       conn,
+		keepalive:  lifeSpan,
+		wmsgs:      make(chan []byte, 100),
+		ctx:        ctx,
+		cancelFunc: cancelFunc,
 	}
 }
 
@@ -108,8 +106,9 @@ func (c *Client) Loop() {
 					// 	packet: disconnectPack,
 					// }
 					// ProcessMessage(msg)
-					disconnectBuf, _ := json.Marshal(disconnectPack)
-					c.ProcessMessage(disconnectBuf)
+					// disconnectBuf, _ := json.Marshal(disconnectPack)
+					// c.ProcessMessage(disconnectBuf)
+					DisconnectHandler(c)
 					return
 				}
 			}
@@ -120,12 +119,13 @@ func (c *Client) Loop() {
 				// 	client: c,
 				// 	packet: disconnectPack,
 				// }
-				disconnectBuf, _ := json.Marshal(disconnectPack)
-				c.ProcessMessage(disconnectBuf)
+				// disconnectBuf, _ := json.Marshal(disconnectPack)
+				// c.ProcessMessage(disconnectBuf)
+				DisconnectHandler(c)
 				return
 			}
-			c.ProcessMessage(data)
-			// SubmitWork(c, data)
+			// c.ProcessMessage(data)
+			ProcessDeviceData(c, data)
 		}
 
 	}
@@ -147,9 +147,9 @@ func (c *Client) ProcessMessage(p []byte) {
 		content := sdk.PackDeviceInfoReq()
 		c.Write([]byte(content))
 	case PubAck:
-		BusinessHandler(packet)
+		PubAckHandler(packet)
 	case Publish:
-		BusinessHandler(packet)
+		PublishHandler(packet)
 	case Heart:
 		c.Ping()
 	case Disconnect:

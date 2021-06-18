@@ -80,14 +80,9 @@ func handleConn(conn net.Conn) {
 	client := NewClient(cid, protocol)
 	manager.SetClient(cid, client)
 
-	// 先执行注册的功能
-	// msg := Message{
-	// 	client: client,
-	// 	packet: connectPack,
-	// }
-	// ProcessMessage(msg)
-	// client.Register()
+	// 执行ping
 	client.Ping()
-
+	// 执行注册
+	RegisterHandler(client)
 	client.Loop()
 }

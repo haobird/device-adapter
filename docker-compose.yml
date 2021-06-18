@@ -1,0 +1,11 @@
+version: '3.1'
+services:
+    face:
+        image: golang:1.16-stretch
+        container_name: face
+        restart: always
+        volumes:
+            - ./:/opt
+        working_dir: /opt
+        command: go run face/main.go
+        # command: ["/bin/sh", "-c", "while true;do echo hello docker;sleep 1;done"]

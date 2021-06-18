@@ -13,6 +13,7 @@ type Config struct {
 	TCPAddr  string   `json:"tcpAddr"`
 	HTTPAddr string   `json:"httpAddr"`
 	AMQP     AMQPConf `json:"amqp"`
+	Bridge   string   `json:"bridge"`
 }
 
 //AMQPConf rabbitmq配置

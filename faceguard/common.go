@@ -40,12 +40,12 @@ type Message struct {
 	packet *Package
 }
 
-func Init() {
+func Init(cfgFile string) {
 	// 加载 配置文件
-	config = LoadConfig("config.json")
+	config = LoadConfig(cfgFile)
 
 	// 创建桥接
-	mybridge = bridge.NewBridge("")
+	mybridge = bridge.NewBridge(config.Bridge)
 
 	// 建立 tcp连接
 	go InitTCP()

@@ -1,0 +1,9 @@
+version: '3.1'
+services:
+    starter:
+        build: .
+        container_name: starter-go
+        restart: always
+        volumes:
+            - ./:/www
+        command: go run main.go

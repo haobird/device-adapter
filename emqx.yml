@@ -1,0 +1,18 @@
+version: '3.1'
+services:
+    broker:
+        image: emqx/emqx
+        restart: always
+        ports:
+            - "1883:1883"
+            - "8083:8083"
+            - "8883:8883"
+            - "8084:8084"
+            - "18083:18083"
+        # volumes:
+        #     - ./:/go/src/app
+        # entrypoint: /bin/sh -c  "while true;do echo hello docker;sleep 1;done"
+        # entrypoint: go run build/bridge.go
+        # command: 
+        #     - /bin/bash pwd
+        

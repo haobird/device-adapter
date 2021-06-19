@@ -11,13 +11,14 @@ import (
 	"github.com/haobird/logger"
 )
 
-// 连接内容的几种状态
+// 数据包的几种状态
 const (
 	Unknown    = "unknown"
 	Connect    = "connect"
 	Heart      = "heart"
 	Publish    = "publish"
 	PubAck     = "puback"
+	Command    = "command"
 	Disconnect = "disconnect"
 )
 

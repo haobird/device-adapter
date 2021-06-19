@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	github.com/BurntSushi/toml v0.3.1 // indirect
+	github.com/eclipse/paho.mqtt.golang v1.3.5
 	github.com/gin-gonic/gin v1.7.2
 	github.com/haobird/fixpool v0.1.0
 	github.com/haobird/gormq v0.0.0-20210526101019-ad4fb22db9af

@@ -9,6 +9,26 @@
 - 删除白名单
 - 远程开门
 
+## 配置文件说明
+
+```
+{
+    "httpAddr": ":9082",  // 对外开放api端口
+    "pushApiAddr" : "",
+    "logLevel" : "debug", // 日志 输出等级
+    "bridge" : "",          // 桥接模式
+    "controlMode": "mqtt",  // 下发指令方式
+    "mqtt" : {
+        "mode" : "special",     // special: 针对服务下发，device: 针对设备下发
+        "addr" : "127.0.0.1:1883", // mqtt 服务地址
+        "clientID" : "carguardAdapter",  // 默认使用的 clientid
+        "username": "name",     // mqtt 默认使用的 username
+        "password": "password", // mqtt 默认使用的 password
+        "topicPrefix" : "request_10000" // 默认topic
+    }
+}
+```
+
 ## 数据上报
 
 涉及到 接口调用的统一使用格式：
@@ -108,7 +128,7 @@
 ```
 {
     "topic" : "plateAuthorized",
-    "deviceCode" : "1111",
+    "key" : "1111",
     "payload" : {
         "id" : "123", // 白名单id
         "plateNo" : "京xxxx",  // 车牌号 范围[1,16]
@@ -136,9 +156,10 @@
 ```
 {
     "topic" : "plateAuthorizedCancel",
-    "deviceCode" : "1111",
+    "key" : "1111",
     "payload" : {
         "id" : "111" // 白名单记录ID
+        "plateNo" : "京xxxx",  // 车牌号 范围[1,16]
     }
 }
 ```
@@ -159,8 +180,9 @@
 ```
 {
     "topic" : "deviceOpenCar",
-    "deviceCode" : "1111",
+    "key" : "1111",
     "payload" : {
+        "parkId" : "10000",
         "timestamp" : 1564735558
     }
 }
@@ -174,6 +196,8 @@
     "Data": null
 }
 ```
+
+
 
 ### 枚举字典
 
@@ -290,3 +314,105 @@
 | 200 |	success |
 | 101 |	common error |
 | 301 |	invalid param |
+
+## 设备模型示例
+
+### 设备指令的定义
+
+```
+{
+    url: "请求的完成连接",
+    method: "请求的方法",
+    body : "请求消息体的字符串",
+    payload : "mqtt请求的消息体"
+}
+```
+
+### 远程开门http示例
+
+```
+url : http://ip:port/LAPI/V1.0/ParkingLots/Entrances/Lanes/0/GateControl
+method : POST
+body: { "Command": 0}
+```
+
+### 远程开门mqtt示例
+
+```
+{
+    "requestId": "202006171129000001",
+    "version": "1.0",
+    "parkId": "10000",
+    "deviceId": "1001",
+    "type": 5,
+    "params": {}
+}
+```
+
+### 白名单新增 http 示例
+
+```
+url : http://ip:port/LAPI/V1.0/ParkingLots/Vehicles/AllowList
+method : POST
+body: {
+    "Num": 2,
+    "AllowListInfo": [
+        {
+            "AllowID": 123,
+            "PlateNo": "浙A12345",
+            "OwnerName": "张三",
+            "PhoneNo": "123456789",
+            "BeginTime": "1592807453",
+            "EndTime": "1592807453",
+            "Remarks": "校内车",
+        },
+        {
+            "AllowID": 234,
+            "PlateNo": "京A12345",
+            "OwnerName": "李四",
+            "PhoneNo": "987654321",
+            "BeginTime": "1592807453",
+            "EndTime": "1592807453",
+            "Remarks": "备注",
+        }
+    ]
+}
+```
+
+### 白名单新增 MQTT示例
+
+其中 listType 为 1 白名单, 2 为 黑名单
+mode ：0 为新增 ， 1 为删除
+
+```
+{
+    "requestId": "202006171129000001",
+    "version": "1.0",
+    "parkId": "10000",
+    "deviceId": "1001",
+    "type": 4,
+    "params": {
+    "listType": 1,
+    "mode": 0,
+    "num": 2,
+    "listInfo": [{
+        "plateNo": "浙A12345",
+        "startTime": "1589951640",
+        "endTime": "1589951740"
+    },
+    {
+        "plateNo": "浙A12346",
+        "startTime": "1589951640",
+        "endTime": "1589951740"
+    }]
+    }
+}
+```
+
+### 白名单删除 http 示例
+
+```
+url : http://ip:port/LAPI/V1.0/ParkingLots/Vehicles/AllowList/${ID}
+method : DELETE
+body: null
+```

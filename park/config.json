@@ -1,0 +1,15 @@
+{
+    "httpAddr": ":9082",
+    "pushApiAddr" : "",
+    "logLevel" : "debug",
+    "bridge" : "",
+    "controlMode": "mqtt",
+    "mqtt" : {
+        "mode" : "device",
+        "addr" : "127.0.0.1:1883",
+        "clientID" : "carguardAdapter",
+        "username": "name",
+        "password": "password",
+        "topicPrefix" : "request_10000"
+    }
+}

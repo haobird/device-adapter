@@ -2,7 +2,7 @@
 
 ## 项目启动
 
-make start-boot
+make start-start
 或者
 docker-compose up --force-recreate --build 
 

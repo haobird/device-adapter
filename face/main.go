@@ -3,5 +3,5 @@ package main
 import "deviceadapter/faceguard"
 
 func main() {
-	faceguard.Init("unv/config.json")
+	faceguard.Init("face/config.json")
 }

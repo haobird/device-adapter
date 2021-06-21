@@ -159,12 +159,19 @@ func (this *Sdk) ParsePacket(buf []byte) (string, string, string, []byte, error)
 		var info PersonVerifyInfo
 		err = json.Unmarshal([]byte(content), &info)
 		if err == nil {
+			libMatInfoNum := info.LibMatInfoNum
+			panoImage := Image{}
+			faceImage := Image{}
+			if libMatInfoNum == 1 {
+				panoImage = info.FaceInfoList[0].PanoImage
+				faceImage = info.FaceInfoList[0].FaceImage
+			}
 			respInfo := map[string]interface{}{
 				"persionID":   info.LibMatInfoList[0].MatchPersonID,
 				"persionName": info.LibMatInfoList[0].MatchPersonInfo.PersonName,
 				"openType":    "1",
-				"panoImage":   info.FaceInfoList[0].PanoImage,
-				"faceImage":   info.FaceInfoList[0].FaceImage,
+				"panoImage":   panoImage,
+				"faceImage":   faceImage,
 				"timestamp":   info.Timestamp,
 			}
 			resp, _ = json.Marshal(respInfo)

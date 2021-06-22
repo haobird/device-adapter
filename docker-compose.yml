@@ -12,3 +12,24 @@ services:
         working_dir: /opt
         command: go run face/main.go
         # command: ["/bin/sh", "-c", "while true;do echo hello docker;sleep 1;done"]
+
+    park:
+        image: golang:1.16-stretch
+        container_name: park
+        restart: always
+        ports:
+            - "9082:9082"
+        volumes:
+            - ./:/opt
+        working_dir: /opt
+        command: go run park/main.go
+
+    broker:
+        image: emqx/emqx
+        restart: always
+        ports:
+            - "1883:1883"
+            - "8083:8083"
+            - "8883:8883"
+            - "8084:8084"
+            - "18083:18083"

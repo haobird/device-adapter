@@ -136,6 +136,7 @@ func (t *Things) ParseCommanData(packet Package) *Package {
 func (t *Things) registerHandler(str string) map[string]interface{} {
 	// 解析json数据
 	result := map[string]interface{}{
+		// "parkId":    "10000",
 		"online":    1,
 		"timestamp": time.Now().Unix(),
 	}

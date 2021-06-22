@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/haobird/fixpool"
 	"github.com/haobird/goutils"
@@ -19,6 +20,7 @@ var (
 	things   = &Things{}
 	msgChans = make(map[string]chan string)
 	control  Control
+	cache    *Cache
 )
 
 // 服务启动
@@ -31,6 +33,11 @@ func Init(cfgFile string) {
 
 	control = NewControl(config.ControlMode)
 
+	// 初始化缓存和回调函数
+	cache = InitCache(func(item *CacheItem) {
+		DisconnectHandler(item.key)
+	})
+
 	// 建立 API 接口
 	go InitHTTP()
 
@@ -42,17 +49,21 @@ func Init(cfgFile string) {
 func ProcessPublsihRaw(action string, buf []byte) {
 	packet := things.ParsePublishData(action, buf)
 	messageType := packet.MessageType
+	clientID := packet.ClientID
 	if messageType == Heart {
 		// 判断是否存在当前设备的缓存
-		// 不存在，则执行注册 方法， 复写当前的包
-		packet = things.ParsePublishData(Connect, buf)
-		messageType = packet.MessageType
-
+		_, err := cache.Value(clientID)
+		if err != nil {
+			// 不存在，则执行注册 方法， 复写当前的包
+			cache.Add(clientID, 2*time.Minute, clientID)
+			packet = things.ParsePublishData(Connect, buf)
+			messageType = Publish
+			// 基础数据上报
+		}
 	}
 
 	if messageType == Publish {
 		// 执行上报逻辑
-		// fmt.Println(body)
 		ele := &bridge.Element{
 			MessageType: packet.MessageType,
 			RequestID:   packet.RequestID,

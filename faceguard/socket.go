@@ -78,11 +78,9 @@ func handleConn(conn net.Conn) {
 	logger.Info("建立连接的设备编号为:", cid)
 
 	client := NewClient(cid, protocol)
-	manager.SetClient(cid, client)
-
-	// 执行ping
-	client.Ping()
 	// 执行注册
 	RegisterHandler(client)
+
+	// 持续读取数据流
 	client.Loop()
 }

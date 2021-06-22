@@ -184,6 +184,46 @@
 
 ### 枚举字典
 
+
+```
+消息定义：
+type Package struct {
+	MessageType string `json:"message_type"` // 消息类型
+	RequestID   string `json:"request_id"`   // 请求id(时间戳)
+	ClientID    string `json:"client_id"`    // 设备序列号
+	Topic       string `json:"topic"`        // 主题
+	Data        []byte `json:"data"`         // 载荷
+}
+
+
+消息类型 ： 表示 设备连接状态
+| message_type | 说明 |
+| --   | -- | 
+| unknown | 未知 |
+| connect | 连接或注册 |
+| heart | 心跳 |
+| publish | 发布或请求 |
+| puback | 确认或响应 |
+| command | 指令 |
+| disconnect | 断开连接 |
+
+业务类型
+| topic | 关键字 | 说明 | 方向 |
+| --   | -- | 
+| heart | HeartReportInfo | 心跳 | 上报 |
+| PersonVerification | PersonVerification | 人脸识别上报 | 上报 |
+| deviceInfoFace | DeviceBasicInfo | 设备信息 | 上报 |
+| reply | Response | 响应 | 上报 |
+| deviceStatut | HeartReportInfo | 在线状态（第一次心跳） | 上报 |
+| personAuthorized | personAuthorized | 白名单下发 | 指令 |
+| personAuthorized | personAuthorizedCancel | 白名单取消 | 指令 |
+| deviceOpenFace | RemoteOpened | 远程开门 | 指令 |
+| deviceInfoFace | DeviceBasicInfo | 设备信息 | 指令 |
+| personSearch | personSearch | 人员信息 | 指令 |
+
+```
+
+
 #### 统一错误码
 
 1-9 为特殊占用

@@ -7,6 +7,6 @@ type mockMQ struct{}
 
 //Publish 发布
 func (m *mockMQ) Publish(e *Element) error {
-	fmt.Println(e)
+	fmt.Println("[bridge] ", e)
 	return nil
 }

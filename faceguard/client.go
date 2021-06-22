@@ -2,7 +2,6 @@ package faceguard
 
 import (
 	"context"
-	"fmt"
 	"sync"
 	"time"
 
@@ -13,31 +12,6 @@ const (
 	Connected    = 1
 	Disconnected = 2
 )
-
-var (
-	connectPack = &Package{
-		MessageType: Connect,
-		RequestID:   "",
-		ClientID:    "",
-		Data:        nil,
-	}
-
-	disconnectPack = &Package{
-		MessageType: Disconnect,
-		RequestID:   "",
-		ClientID:    "",
-		Data:        nil,
-	}
-)
-
-// 定义消息结构
-type Package struct {
-	MessageType string `json:"message_type"` // 消息类型
-	RequestID   string `json:"request_id"`   // 请求id(时间戳)
-	ClientID    string `json:"client_id"`    // 设备序列号
-	Topic       string `json:"topic"`        // 主题
-	Data        []byte `json:"data"`         // 载荷
-}
 
 //Client 客户端（设备）
 type Client struct {
@@ -125,47 +99,10 @@ func (c *Client) Loop() {
 				return
 			}
 			// c.ProcessMessage(data)
-			ProcessDeviceData(c, data)
+			ProcessRawData(c, data)
 		}
 
 	}
-}
-
-func (c *Client) ProcessMessage(p []byte) {
-	logger.Debugf("client %s ProcessMessage %s", c.ID, string(p))
-	packet, err := sdk.HandlePacket(p)
-	if err != nil {
-		logger.Errorf("client %s ProcessMessage error:%s", c.ID, err)
-		return
-	}
-
-	// 基于消息内容 进行 相应的处理
-	messageType := packet.MessageType
-	switch messageType {
-	case Connect:
-		logger.Infof("[%s] 设备Register ", c.ID)
-		content := sdk.PackDeviceInfoReq()
-		c.Write([]byte(content))
-	case PubAck:
-		PubAckHandler(packet)
-	case Publish:
-		PublishHandler(packet)
-	case Heart:
-		c.Ping()
-	case Disconnect:
-		c.Close()
-	}
-}
-
-func (c *Client) Register() {
-	content := sdk.PackDeviceInfoReq()
-	fmt.Println("Register 数据：", content)
-	c.Write([]byte(content))
-}
-
-func (c *Client) Ping() {
-	pong := sdk.Pong()
-	c.Write([]byte(pong))
 }
 
 //Close 关闭连接

@@ -8,16 +8,32 @@ import (
 
 //RegisterHandler 注册
 func RegisterHandler(c *Client) {
-	content := sdk.PackDeviceInfoReq()
-	c.Write([]byte(content))
+	// 注册方法
+	cid := c.ID
+	manager.SetClient(cid, c)
+	// 响应第一次的心跳
+	HeartHandler(c)
+
+	// 更新设备在线状态
+	packet := sdk.Packet_deviceStatus(1)
+	packet.ClientID = cid
+	msg := Message{
+		client: c,
+		packet: packet,
+	}
+	ProcessMessage(msg)
+
+	// 获取设备信息
+	// ProcessDataDown()
 }
 
 // HeartHandler 心跳
 func HeartHandler(c *Client) {
-	pong := sdk.Pong()
-	c.Write([]byte(pong))
+	packet := sdk.Packet_heart()
+	SubmitWork(c, packet)
 }
 
+// DisconnectHandler 断开
 func DisconnectHandler(c *Client) {
 	manager.DeleteClient(c.ID)
 	c.Close()

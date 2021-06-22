@@ -11,23 +11,12 @@ import (
 	"github.com/haobird/logger"
 )
 
-// 数据包的几种状态
-const (
-	Unknown    = "unknown"
-	Connect    = "connect"
-	Heart      = "heart"
-	Publish    = "publish"
-	PubAck     = "puback"
-	Command    = "command"
-	Disconnect = "disconnect"
-)
-
 var (
 	config   *Config
 	manager  = &ConnManager{}
 	tcpAddr  = ":3570"
 	httpAddr = ":9081"
-	sdk      = &Sdk{}
+	sdk      = &Things{}
 	msgChans = make(map[string]chan string)
 	mybridge bridge.Bridge
 	lifeSpan = 60              // 单位 秒
@@ -58,26 +47,25 @@ func Init(cfgFile string) {
 	keepAlive()
 }
 
-// ProcessCommand 处理命令
-func ProcessCommand(c *Client, p []byte) {
-	wpool.Submit(c.ID, func() {
-		c.Write(p)
-	})
-}
-
 // ProcessDeviceData 处理数据
-func ProcessDeviceData(c *Client, p []byte) {
-	logger.Debugf("client %s ProcessMessage %s", c.ID, string(p))
+func ProcessRawData(c *Client, p []byte) {
+	str := string(p)
+	// 过滤掉图片数据
+	p = []byte(Tidy(str))
+	logger.Debugf("client %s ProcessRawData %s", c.ID, string(p))
+
 	// 解析数据包
-	packet, err := sdk.HandlePacket(p)
-	if err != nil {
-		logger.Errorf("client %s ProcessMessage error:%s", c.ID, err)
+	packet := sdk.ProcessDataUp(p)
+	if packet == nil {
+		logger.Errorf("client %s ProcessMessage error", c.ID)
 		return
 	}
+
 	msg := Message{
 		client: c,
 		packet: packet,
 	}
+
 	ProcessMessage(msg)
 }
 
@@ -85,13 +73,16 @@ func ProcessDeviceData(c *Client, p []byte) {
 func ProcessMessage(msg Message) {
 	c := msg.client
 	packet := msg.packet
+	messageType := packet.MessageType
+
+	logger.Debugf("client %s ProcessMessage %s", c.ID, messageType)
 
 	// 基于消息内容 进行 相应的处理
-	messageType := packet.MessageType
+
 	switch messageType {
-	case Connect:
-		logger.Infof("[%s] 设备Register ", c.ID)
-		RegisterHandler(c)
+	// case Connect:
+	// 	logger.Infof("[%s] 设备Register ", c.ID)
+	// 	RegisterHandler(c)
 	case PubAck:
 		PubAckHandler(packet)
 	case Publish:
@@ -101,6 +92,25 @@ func ProcessMessage(msg Message) {
 	case Disconnect:
 		DisconnectHandler(c)
 	}
+}
+
+// 发送到设备 数据包
+func SubmitWork(c *Client, packet *Package) {
+	logger.Debugf("SubmitWork设备数据：MessageType:%s,RequestID:%s,ClientID:%s,Topic:%s, Data:%s",
+		packet.MessageType,
+		packet.RequestID,
+		packet.ClientID,
+		packet.Topic,
+		string(packet.Data))
+	// buf, _ := json.Marshal(packet)
+	ProcessCommand(c, packet.Data)
+}
+
+// 执行下发任务
+func ProcessCommand(c *Client, p []byte) {
+	wpool.Submit(c.ID, func() {
+		c.Write(p)
+	})
 }
 
 func keepAlive() {

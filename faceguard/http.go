@@ -94,13 +94,13 @@ func AsyncReq(buf []byte) (int, string, error) {
 	msgId := goutils.String(time.Now().Unix())
 	logger.Debug("msgID :", msgId)
 	// 封装Package
-	pack := Package{
+	packet := &Package{
 		Topic:     input.Topic,
 		RequestID: msgId,
 		ClientID:  input.Key,
 		Data:      buf,
 	}
-	content := sdk.Trans(pack)
+	content := sdk.ProcessDataDown(packet)
 	// fmt.Println(string(content))
 	// fmt.Println("字符串长度", len(string(content)))
 	// err = cli.Write([]byte(content))

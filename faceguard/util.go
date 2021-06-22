@@ -2,8 +2,10 @@ package faceguard
 
 import (
 	"bytes"
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -20,6 +22,24 @@ func between(str string, start string, end string) string {
 		return ""
 	}
 	return str[s : e+s]
+}
+
+//Tidy 过滤信息body中的 图片 以及 FaceArea 等信息
+func Tidy(str string) string {
+	// reqStr := string(content)
+	var replaceDataReg = regexp.MustCompile(`"/9j[A-Za-z0-9\+/=]+"`)
+	str = replaceDataReg.ReplaceAllString(str, `"/9j/ddd"`)
+
+	// var replaceFeatureReg = regexp.MustCompile(`"Feature"(.+?)"(.+?)"`)
+	// str = replaceFeatureReg.ReplaceAllString(str, `"Feature":"PRdx/w+rvQ=="`)
+	return str
+}
+
+//TidyStruct 结构体的过滤
+func TidyStruct(input interface{}) string {
+	buf, _ := json.Marshal(input)
+	// fmt.Println(string(buf))
+	return Tidy(string(buf))
 }
 
 //Request 发起 Http请求

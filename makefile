@@ -1,6 +1,6 @@
 # 启动
 start:
-	docker-compose up -f docker-compose.yml --force-recreate -d 
+	docker-compose -f docker-compose.yml  up  --force-recreate -d 
 
 emqx:
 	docker-compose -f emqx.yml up  --force-recreate -d

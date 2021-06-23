@@ -36,6 +36,7 @@ func (m *MQTTControl) Publish(packet *Package) error {
 func (m *MQTTControl) PublishDevice(input map[string]interface{}) error {
 	var qoss byte = 0
 	buf, err := json.Marshal(input["payload"])
+	fmt.Println("发送topic:", config.Mqtt["topicPrefix"], "发送 body:", string(buf))
 	m.conn.Publish(config.Mqtt["topicPrefix"], qoss, false, buf)
 	return err
 }

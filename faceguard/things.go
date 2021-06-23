@@ -162,7 +162,8 @@ func (t *Things) ProcessDataUp(buf []byte) *Package {
 		message_type = Publish
 		topic = "deviceInfoFace"
 		result = t.business_handler_deviceInfo(content)
-
+	case "reply":
+		message_type = PubAck
 	}
 
 	packet = &Package{
@@ -172,10 +173,13 @@ func (t *Things) ProcessDataUp(buf []byte) *Package {
 		Topic:       topic,
 	}
 
+	var p []byte
 	if result != nil {
-		buf, _ := json.Marshal(result)
-		packet.Data = buf
+		p, _ = json.Marshal(result)
+	} else {
+		p = []byte(content)
 	}
+	packet.Data = p
 
 	return packet
 }

@@ -24,7 +24,8 @@ func RegisterHandler(c *Client) {
 	ProcessMessage(msg)
 
 	// 获取设备信息
-	// ProcessDataDown()
+	content := sdk.Packet_DeviceInfoReq()
+	SubmitWork(c, content)
 }
 
 // HeartHandler 心跳

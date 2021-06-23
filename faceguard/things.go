@@ -306,6 +306,19 @@ func (t *Things) Packet_heart() *Package {
 	return packet
 }
 
+// 获取设备信息的请求
+func (t *Things) Packet_DeviceInfoReq() *Package {
+	packet := &Package{
+		MessageType: Publish,
+		RequestID:   goutils.String(time.Now().Unix()),
+		ClientID:    "",
+		Topic:       "deviceInfoFace",
+	}
+	data := t.ProcessDataDown(packet)
+	packet.Data = data
+	return packet
+}
+
 // 通行记录上报
 func (t *Things) business_handler_personVerification(body string) map[string]interface{} {
 	var info PersonVerifyInfo

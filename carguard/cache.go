@@ -219,7 +219,11 @@ func NewCacheItem(key string, lifeSpan time.Duration, data interface{}) *CacheIt
 }
 
 // 保活
-func (item *CacheItem) KeepAlive() {}
+func (item *CacheItem) KeepAlive() {
+	item.Lock()
+	defer item.Unlock()
+	item.accessedOn = time.Now()
+}
 
 // 返回值
 func (item *CacheItem) Data() interface{} {

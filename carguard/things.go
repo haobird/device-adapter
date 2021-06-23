@@ -237,7 +237,7 @@ func (t *Things) commandAuthorizedHandler(params map[string]interface{}) map[str
 		"type":      4,
 		"params": map[string]interface{}{
 			"listType": 1,
-			"mode":     0,
+			"mode":     1,
 			"num":      1,
 			"listInfo": []map[string]string{
 				{
@@ -274,7 +274,7 @@ func (t *Things) commandAuthorizedCancelHandler(params map[string]interface{}) m
 		"type":      4,
 		"params": map[string]interface{}{
 			"listType": 1,
-			"mode":     1,
+			"mode":     3,
 			"num":      1,
 			"listInfo": []map[string]string{
 				{

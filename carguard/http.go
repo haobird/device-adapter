@@ -41,7 +41,7 @@ func InitHTTP() {
 	router := gin.Default()
 
 	// 基础数据上报
-	router.POST("api/basicinfo", func(c *gin.Context) {
+	router.POST("/api/upark/basicinfo", func(c *gin.Context) {
 		// 解析 json 数据
 		buf, err := c.GetRawData()
 		// 处理业务
@@ -55,7 +55,7 @@ func InitHTTP() {
 	})
 
 	// 心跳保活上报
-	router.POST("api/keepalive", func(c *gin.Context) {
+	router.POST("/api/upark/keepalive", func(c *gin.Context) {
 		// 解析 json 数据
 		buf, err := c.GetRawData()
 		// 处理业务
@@ -69,7 +69,7 @@ func InitHTTP() {
 	})
 
 	// 车位告警上报
-	router.POST("api/parkalarm", func(c *gin.Context) {
+	router.POST("/api/upark/parkalarm", func(c *gin.Context) {
 		// 解析 json 数据
 		buf, err := c.GetRawData()
 		// 处理业务
@@ -83,7 +83,7 @@ func InitHTTP() {
 	})
 
 	// 过车抓拍上报
-	router.POST("api/capture", func(c *gin.Context) {
+	router.POST("/api/upark/capture", func(c *gin.Context) {
 		// 解析 json 数据
 		buf, err := c.GetRawData()
 		// 处理业务
@@ -97,7 +97,7 @@ func InitHTTP() {
 	})
 
 	// 开闸放行结果上报
-	router.POST("api/notifyresult/gatecontrol", func(c *gin.Context) {
+	router.POST("/api/upark/notifyresult/gatecontrol", func(c *gin.Context) {
 		// 解析 json 数据
 		buf, err := c.GetRawData()
 		// 处理业务
@@ -111,7 +111,7 @@ func InitHTTP() {
 	})
 
 	// 手动抓拍结果上报
-	router.POST("api/notifyresult/manualcapture/common", func(c *gin.Context) {
+	router.POST("/api/upark/notifyresult/manualcapture/common", func(c *gin.Context) {
 		// 解析 json 数据
 		buf, err := c.GetRawData()
 		// 处理业务
@@ -125,7 +125,7 @@ func InitHTTP() {
 	})
 
 	// 车位灯设置结果上报
-	router.POST("api/notifyresult/lamp", func(c *gin.Context) {
+	router.POST("/api/upark/notifyresult/lamp", func(c *gin.Context) {
 		// 解析 json 数据
 		buf, err := c.GetRawData()
 		// 处理业务
@@ -139,7 +139,7 @@ func InitHTTP() {
 	})
 
 	// 黑白名单同步结果上报
-	router.POST("api/notifyresult/list", func(c *gin.Context) {
+	router.POST("/api/upark/notifyresult/list", func(c *gin.Context) {
 		// 解析 json 数据
 		buf, err := c.GetRawData()
 		// 处理业务
@@ -153,7 +153,7 @@ func InitHTTP() {
 	})
 
 	// 开闸放行结果上报
-	router.POST("api/carguard", func(c *gin.Context) {
+	router.POST("/api/upark/carguard", func(c *gin.Context) {
 		// 解析 json 数据
 		buf, err := c.GetRawData()
 		// 处理业务

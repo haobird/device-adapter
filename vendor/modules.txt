@@ -32,7 +32,7 @@ github.com/haobird/fixpool
 # github.com/haobird/gormq v0.0.0-20210526101019-ad4fb22db9af
 ## explicit
 github.com/haobird/gormq
-# github.com/haobird/goutils v0.0.0-20210615115033-f26c60c931ed
+# github.com/haobird/goutils v0.1.0
 ## explicit
 github.com/haobird/goutils
 # github.com/haobird/logger v0.0.0-20210518023245-528df6ad53eb

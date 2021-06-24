@@ -169,9 +169,9 @@ func (t *Things) captureHandler(str string) map[string]interface{} {
 		"vehicleColor": gjson.Get(str, "vehicleColor").String(),
 		"plateType":    gjson.Get(str, "plateType").String(),
 		"plateColor":   gjson.Get(str, "plateColor").String(),
-		"picInfo":      gjson.Get(str, "picInfo").String(),
+		"picInfo":      gjson.Get(str, "picInfo").Value(),
 	}
-	picTime, _ := goutils.GetTimeByString(picTimeStr)
+	picTime, _ := goutils.GetTimeByISONormalString(picTimeStr)
 	result["timestamp"] = goutils.GetTimeUnix(picTime)
 	return result
 }

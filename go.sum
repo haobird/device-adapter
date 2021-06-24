@@ -30,6 +30,8 @@ github.com/haobird/gormq v0.0.0-20210526101019-ad4fb22db9af h1:BCAtsBIoid8wt4oaA
 github.com/haobird/gormq v0.0.0-20210526101019-ad4fb22db9af/go.mod h1:12x9cQFxq5LN6bOh7AfTCoMTHJEdVuVOm6Hic74ix/Q=
 github.com/haobird/goutils v0.0.0-20210615115033-f26c60c931ed h1:BMR2hHUy8QBqilkFnVyLjvQ870BnTA3yE0jYyPX+fnI=
 github.com/haobird/goutils v0.0.0-20210615115033-f26c60c931ed/go.mod h1:+2K2I+b/3Fdr+7Stz6wz6yueF5LW67X322JXxl9hPEo=
+github.com/haobird/goutils v0.1.0 h1:ApD4aAokcTaa8E2japDXPzw80b/whffWI8iHcotlpIc=
+github.com/haobird/goutils v0.1.0/go.mod h1:+2K2I+b/3Fdr+7Stz6wz6yueF5LW67X322JXxl9hPEo=
 github.com/haobird/logger v0.0.0-20210518023245-528df6ad53eb h1:STbH19enveiOUvNltm7SBFCEIGaXNj94yvkjoe/v4kU=
 github.com/haobird/logger v0.0.0-20210518023245-528df6ad53eb/go.mod h1:z2PBDFbo0Vv4xnyEKSAPmhv5+Une40MS0iUKLI64hf0=
 github.com/json-iterator/go v1.1.9 h1:9yzud/Ht36ygwatGx56VwCZtlI/2AD15T1X2sjSuGns=

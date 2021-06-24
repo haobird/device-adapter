@@ -49,6 +49,9 @@ func Init(cfgFile string) {
 
 // ProcessPublsih 处理上行消息
 func ProcessPublsihRaw(action string, buf []byte) {
+	str := string(buf)
+	// 过滤掉图片数据
+	buf = []byte(Tidy(str))
 	packet := things.ParsePublishData(action, buf)
 	messageType := packet.MessageType
 	clientID := packet.ClientID
@@ -68,11 +71,11 @@ func ProcessPublsihRaw(action string, buf []byte) {
 			// 不存在，则添加缓存
 			cache.Add(clientID, 2*time.Minute, packet.Data)
 			// 基础数据上报
-			// packet = things.ParsePublishData(Connect, buf)
-			// messageType = Publish
+			packet = things.ParsePublishData(Connect, buf)
+			messageType = Publish
 		} else {
 			// 如果存在，则当做心跳数据
-			messageType = Heart
+			// messageType = Heart
 		}
 	}
 

@@ -10,7 +10,8 @@ const (
 	//TIMEFORMAT 时间格式化
 	TIMEFORMAT = "20060102150405"
 	//NORMALTIMEFORMAT 普通格式化
-	NORMALTIMEFORMAT = "2006-01-02 15:04:05"
+	NORMALTIMEFORMAT    = "2006-01-02 15:04:05"
+	ISONORMALTIMEFORMAT = "2006-01-02T15:04:05"
 )
 
 //GetTime 当前时间
@@ -57,6 +58,14 @@ func GetTimeByNormalString(timestring string) (time.Time, error) {
 		return time.Time{}, nil
 	}
 	return time.ParseInLocation(NORMALTIMEFORMAT, timestring, time.Local)
+}
+
+//GetTimeByNormalString 标准字符串 转 时间
+func GetTimeByISONormalString(timestring string) (time.Time, error) {
+	if timestring == "" {
+		return time.Time{}, nil
+	}
+	return time.ParseInLocation(ISONORMALTIMEFORMAT, timestring, time.Local)
 }
 
 //CompareTime 比较两个时间大小

@@ -52,7 +52,7 @@ func PubAckHandler(packet *Package) {
 func PublishHandler(packet *Package) {
 	// fmt.Println(body)
 	ele := &bridge.Element{
-		MessageType: packet.MessageType,
+		MessageType: "entranceguard",
 		RequestID:   packet.RequestID,
 		Timestamp:   goutils.Int64(packet.RequestID),
 		ClientID:    packet.ClientID,

@@ -82,7 +82,7 @@ func ProcessPublsihRaw(action string, buf []byte) {
 	if messageType == Publish {
 		// 执行上报逻辑
 		ele := &bridge.Element{
-			MessageType: packet.MessageType,
+			MessageType: "vehicledetection",
 			RequestID:   packet.RequestID,
 			Timestamp:   goutils.Int64(packet.RequestID),
 			ClientID:    packet.ClientID,

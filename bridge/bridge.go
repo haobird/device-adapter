@@ -20,6 +20,8 @@ func NewBridge(name string) Bridge {
 	switch name {
 	case "rabbitmq":
 		return InitBridgeMQ()
+	case "api":
+		return InitApiMQ()
 	default:
 		return &mockMQ{}
 	}

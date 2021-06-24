@@ -1,15 +1,15 @@
 version: '3.1'
 services:
-    broker:
-        image: emqx/emqx
-        container_name: broker
-        restart: always
-        ports:
-            - "1883:1883"
-            - "8083:8083"
-            - "8883:8883"
-            - "8084:8084"
-            - "18083:18083"
+    # broker:
+    #     image: emqx/emqx
+    #     container_name: broker
+    #     restart: always
+    #     ports:
+    #         - "1883:1883"
+    #         - "8083:8083"
+    #         - "8883:8883"
+    #         - "8084:8084"
+    #         - "18083:18083"
             
     face:
         image: golang:1.16-stretch

@@ -21,9 +21,9 @@ type ReqParams struct {
 }
 
 type responseInfo struct {
-	Code int         `json:"code"`
-	Msg  string      `json:"msg"`
-	Data interface{} `json:"data"`
+	Code int         `json:"Code"`
+	Msg  string      `json:"Msg"`
+	Data interface{} `json:"Data"`
 }
 
 func respondWithInfo(code int, message string, data interface{}, c *gin.Context) {
@@ -44,6 +44,7 @@ func InitHTTP() {
 		// 解析 json 数据
 		buf, _ := c.GetRawData()
 		code, content, err := AsyncReq(buf)
+		logger.Debug("[response]", "code:", code, " ,content:", content, " ,err: ", err)
 		if err != nil {
 			respondWithInfo(code, err.Error(), content, c)
 			return

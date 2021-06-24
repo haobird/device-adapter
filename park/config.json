@@ -2,7 +2,7 @@
     "httpAddr": ":9082",
     "pushApiAddr" : "",
     "logLevel" : "debug",
-    "bridge" : "",
+    "bridge" : "api",
     "controlMode": "mqtt",
     "mqtt" : {
         "mode" : "device",

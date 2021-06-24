@@ -2,5 +2,5 @@
     "tcpAddr" : ":3570",
     "httpAddr": ":9081",
     "pushApiAddr" : "",
-    "bridge" : ""
+    "bridge" : "api"
 }

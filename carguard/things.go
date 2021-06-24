@@ -15,7 +15,7 @@ type Things struct{}
 // ParsePublishData 解析请求数据
 func (t *Things) ParsePublishData(action string, buf []byte) *Package {
 	// 根据对应的功能，做相应的内容处理
-	version := gjson.GetBytes(buf, "version").String()
+	// version := gjson.GetBytes(buf, "version").String()
 	parkId := gjson.GetBytes(buf, "parkId").String()
 	deviceId := gjson.GetBytes(buf, "deviceId").String()
 	params := gjson.GetBytes(buf, "params").String()
@@ -43,7 +43,6 @@ func (t *Things) ParsePublishData(action string, buf []byte) *Package {
 	}
 
 	result["parkId"] = parkId
-	fmt.Println("version:", version)
 
 	data, _ := json.Marshal(result)
 
@@ -74,7 +73,7 @@ func (t *Things) ParsePubackData(action string, buf []byte) *Package {
 	switch action {
 	case "gatecontrol":
 		topic = "gatecontrol"
-		data = t.basicinfoHandler(params)
+		data = t.gatecontrolResultHandler(params)
 	}
 
 	data["parkId"] = parkId

@@ -44,6 +44,7 @@ func InitHTTP() {
 	router.POST("/api/upark/basicinfo", func(c *gin.Context) {
 		// 解析 json 数据
 		buf, err := c.GetRawData()
+		fmt.Println("basicinfo result:", string(buf))
 		// 处理业务
 		if err != nil {
 			respondWithInfo(101, err.Error(), nil, c)
@@ -98,64 +99,30 @@ func InitHTTP() {
 
 	// 开闸放行结果上报
 	router.POST("/api/upark/notifyresult/gatecontrol", func(c *gin.Context) {
-		// 解析 json 数据
-		buf, err := c.GetRawData()
-		// 处理业务
-		if err != nil {
-			respondWithInfo(101, err.Error(), nil, c)
-			return
-		}
-
-		go ProcessPubackRaw("gatecontrol", buf)
-		respondWithInfo(200, "success", nil, c)
+		HandlerNotifyresult("gatecontrol", c)
 	})
 
 	// 手动抓拍结果上报
 	router.POST("/api/upark/notifyresult/manualcapture/common", func(c *gin.Context) {
-		// 解析 json 数据
-		buf, err := c.GetRawData()
-		// 处理业务
-		if err != nil {
-			respondWithInfo(101, err.Error(), nil, c)
-			return
-		}
-
-		go ProcessPubackRaw("manualcapturecommon", buf)
-		respondWithInfo(200, "success", nil, c)
+		HandlerNotifyresult("manualcapturecommon", c)
 	})
 
 	// 车位灯设置结果上报
 	router.POST("/api/upark/notifyresult/lamp", func(c *gin.Context) {
-		// 解析 json 数据
-		buf, err := c.GetRawData()
-		// 处理业务
-		if err != nil {
-			respondWithInfo(101, err.Error(), nil, c)
-			return
-		}
-
-		go ProcessPubackRaw("lamp", buf)
-		respondWithInfo(200, "success", nil, c)
+		HandlerNotifyresult("lamp", c)
 	})
 
 	// 黑白名单同步结果上报
 	router.POST("/api/upark/notifyresult/list", func(c *gin.Context) {
-		// 解析 json 数据
-		buf, err := c.GetRawData()
-		// 处理业务
-		if err != nil {
-			respondWithInfo(101, err.Error(), nil, c)
-			return
-		}
-
-		go ProcessPubackRaw("authorized", buf)
-		respondWithInfo(200, "success", nil, c)
+		HandlerNotifyresult("authorized", c)
 	})
 
-	// 开闸放行结果上报
-	router.POST("/api/upark/carguard", func(c *gin.Context) {
+	// 对外开放接口
+	router.POST("/api/carguard", func(c *gin.Context) {
 		// 解析 json 数据
 		buf, err := c.GetRawData()
+
+		fmt.Println("carguard result:", string(buf))
 		// 处理业务
 		if err != nil {
 			respondWithInfo(101, err.Error(), nil, c)
@@ -164,19 +131,19 @@ func InitHTTP() {
 
 		code, content, err := AsyncReq(buf)
 
-		statusCode := gjson.Get(content, "Response.StatusCode").Int()
-		if statusCode != 0 {
-			statusString := gjson.Get(content, "Response.StatusString").String()
-			respondWithInfo(int(statusCode), statusString, content, c)
-			return
-		}
+		// statusCode := gjson.Get(content, "Response.StatusCode").Int()
+		// if statusCode != 0 {
+		// 	statusString := gjson.Get(content, "Response.StatusString").String()
+		// 	respondWithInfo(int(statusCode), statusString, content, c)
+		// 	return
+		// }
 
-		responseCode := gjson.Get(content, "Response.ResponseCode").Int()
-		if responseCode != 0 {
-			responseString := gjson.Get(content, "Response.ResponseString").String()
-			respondWithInfo(int(responseCode), responseString, content, c)
-			return
-		}
+		// responseCode := gjson.Get(content, "Response.ResponseCode").Int()
+		// if responseCode != 0 {
+		// 	responseString := gjson.Get(content, "Response.ResponseString").String()
+		// 	respondWithInfo(int(responseCode), responseString, content, c)
+		// 	return
+		// }
 
 		// respondWithInfo(0, "success", string(content), c)
 		respondWithInfo(code, err.Error(), content, c)
@@ -224,11 +191,15 @@ func AsyncReq(buf []byte) (int, string, error) {
 
 	// 循环读取 通道的响应，并增加超时退出
 	var code int = 0
-	var msg string
+	var content string
 	select {
-	case msg = <-ch:
+	case msg := <-ch:
 		fmt.Println("data from channel ", msgId)
-		err = errors.New("success")
+		// err = errors.New("success")
+		code = goutils.Int(gjson.Get(msg, "code").String())
+		message := gjson.Get(msg, "message").String()
+		content = gjson.Get(msg, "data").String()
+		err = errors.New(message)
 	case <-time.After(10 * time.Second):
 		fmt.Println("TimeOut")
 		err = errors.New("响应超时TimeOut")
@@ -240,5 +211,5 @@ func AsyncReq(buf []byte) (int, string, error) {
 	close(ch)
 
 	// 返回结果
-	return code, msg, err
+	return code, content, err
 }

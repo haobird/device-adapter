@@ -8,8 +8,10 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/haobird/fixpool"
 	"github.com/haobird/goutils"
+	"github.com/haobird/logger"
 )
 
 var (
@@ -50,15 +52,27 @@ func ProcessPublsihRaw(action string, buf []byte) {
 	packet := things.ParsePublishData(action, buf)
 	messageType := packet.MessageType
 	clientID := packet.ClientID
+	topic := packet.Topic
+
 	if messageType == Heart {
+		// 触发缓存更新
+		cache.Value(clientID)
+		return
+	}
+
+	// 如果是设备信息上报，则首先判断是否有缓存
+	if topic == "deviceInfoCar" {
 		// 判断是否存在当前设备的缓存
 		_, err := cache.Value(clientID)
 		if err != nil {
-			// 不存在，则执行注册 方法， 复写当前的包
-			cache.Add(clientID, 2*time.Minute, clientID)
-			packet = things.ParsePublishData(Connect, buf)
-			messageType = Publish
+			// 不存在，则添加缓存
+			cache.Add(clientID, 2*time.Minute, packet.Data)
 			// 基础数据上报
+			// packet = things.ParsePublishData(Connect, buf)
+			// messageType = Publish
+		} else {
+			// 如果存在，则当做心跳数据
+			messageType = Heart
 		}
 	}
 
@@ -77,6 +91,22 @@ func ProcessPublsihRaw(action string, buf []byte) {
 
 }
 
+// 处理http的异步上报
+func HandlerNotifyresult(action string, c *gin.Context) {
+	// 解析 json 数据
+	buf, err := c.GetRawData()
+	logger.Debugf("Notifyresult [%s], body: %s", action, string(buf))
+	// 处理业务
+	if err != nil {
+		respondWithInfo(101, err.Error(), nil, c)
+		return
+	}
+
+	go ProcessPubackRaw(action, buf)
+	respondWithInfo(200, "success", nil, c)
+
+}
+
 // ProcessPubackRaw 处理响应消息
 func ProcessPubackRaw(action string, buf []byte) {
 	packet := things.ParsePubackData(action, buf)
@@ -88,6 +118,7 @@ func ProcessPubackRaw(action string, buf []byte) {
 
 // 处理指令下发
 func ProcessCommandPack(packet Package) {
+	logger.Debug("执行下发指令包的处理：", packet)
 	// 格式化数据
 	newPacket := things.ParseCommanData(packet)
 	// 执行下发

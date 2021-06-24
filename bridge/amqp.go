@@ -15,6 +15,7 @@ type BridgeMQ struct {
 
 //Publish 发布
 func (b *BridgeMQ) Publish(e *Element) error {
+	fmt.Println("[bridge] ", e)
 	// 转换为 二进制
 	buf, err := json.Marshal(e)
 	if err != nil {

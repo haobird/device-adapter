@@ -2,6 +2,7 @@ package bridge
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/haobird/goutils"
 )
@@ -18,6 +19,7 @@ func InitApiMQ() *apiMQ {
 }
 
 func (m *apiMQ) Publish(e *Element) error {
+	fmt.Println("[bridge] ", e)
 	kind := e.MessageType
 	url := m.addr + kind
 	topic := e.Topic
@@ -35,7 +37,8 @@ func (m *apiMQ) Publish(e *Element) error {
 	header := map[string]string{
 		"Content-Type": "application/json;charset=UTF-8",
 	}
-	goutils.Request(url, "POST", buf, header)
+	body, err := goutils.Request(url, "POST", buf, header)
+	fmt.Println("[bridge] resp body:", body, " err:", err)
 
 	return nil
 }

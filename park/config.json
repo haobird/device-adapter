@@ -6,7 +6,7 @@
     "controlMode": "mqtt",
     "mqtt" : {
         "mode" : "device",
-        "addr" : "192.168.1.125:1883",
+        "addr" : "192.168.1.126:1883",
         "clientID" : "carguardAdapter",
         "username": "name",
         "password": "password",

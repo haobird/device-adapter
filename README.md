@@ -2,6 +2,8 @@
 
 ## 项目启动
 
+注意：一定要先准备好mqtt broker
+
 make start-boot
 或者
 docker-compose up --force-recreate --build 

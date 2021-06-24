@@ -3,6 +3,7 @@ package carguard
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/haobird/logger"
@@ -63,11 +64,12 @@ func InitMQTTControl() *MQTTControl {
 }
 
 var connectHandler mqtt.OnConnectHandler = func(client mqtt.Client) {
-	logger.Debug("Connected")
+	logger.Debug("MQTT Connected")
 }
 
 var connectLostHandler mqtt.ConnectionLostHandler = func(client mqtt.Client, err error) {
 	logger.Debug("Connect lost: %v", err)
+	RetryConnect(client)
 }
 
 var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
@@ -90,10 +92,19 @@ func NewMQTTClient(option map[string]string) (mqtt.Client, error) {
 	opts.OnConnect = connectHandler
 	opts.OnConnectionLost = connectLostHandler
 	conn := mqtt.NewClient(opts)
-	if token := conn.Connect(); token.Wait() && token.Error() != nil {
-		// 打印错误日志
-		// panic(token.Error())
-		return nil, token.Error()
-	}
+	RetryConnect(conn)
 	return conn, nil
+}
+
+func RetryConnect(conn mqtt.Client) {
+	for {
+
+		if token := conn.Connect(); token.Wait() && token.Error() == nil {
+			// 打印错误日志
+			return
+		}
+		fmt.Println("[control mqtt] RetryConnect ")
+		time.Sleep(3 * time.Second)
+	}
+
 }

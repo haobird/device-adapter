@@ -6,6 +6,7 @@ import (
 	"time"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
+	"github.com/haobird/goutils"
 	"github.com/haobird/logger"
 )
 
@@ -57,6 +58,9 @@ func InitMQTTControl() *MQTTControl {
 	var option = config.Mqtt
 	// json.Unmarshal([]byte(config.Mqtt), &option)
 	logger.Info("mqtt配置为：", option)
+	clientid := option["clientid"]
+	salt, _ := goutils.GenShortID()
+	option["clientid"] = clientid + "_" + salt
 	client, _ := NewMQTTClient(option)
 	return &MQTTControl{
 		conn: client,

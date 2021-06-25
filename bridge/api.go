@@ -19,7 +19,7 @@ func InitApiMQ() *apiMQ {
 }
 
 func (m *apiMQ) Publish(e *Element) error {
-	fmt.Println("[bridge] [mockMQ]", e)
+	fmt.Println("[bridge] [api]", e)
 	kind := e.MessageType
 	url := m.addr + kind
 	topic := e.Topic

@@ -92,14 +92,18 @@ func NewMQTTClient(option map[string]string) (mqtt.Client, error) {
 	opts.OnConnect = connectHandler
 	opts.OnConnectionLost = connectLostHandler
 	conn := mqtt.NewClient(opts)
-	RetryConnect(conn)
+	// RetryConnect(conn)
+	if token := conn.Connect(); token.Wait() && token.Error() != nil {
+		// 打印错误日志
+		return nil, token.Error()
+	}
 	return conn, nil
 }
 
 func RetryConnect(conn mqtt.Client) {
 	for {
 
-		if token := conn.Connect(); token.Wait() && token.Error() == nil {
+		if token := conn.Connect(); token.Wait() && token.Error() != nil {
 			// 打印错误日志
 			return
 		}

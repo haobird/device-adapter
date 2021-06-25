@@ -78,7 +78,7 @@ func ProcessMessage(msg Message) {
 	logger.Debugf("client %s ProcessMessage %s", c.ID, messageType)
 
 	// 基于消息内容 进行 相应的处理
-
+	packet.ClientID = c.ID
 	switch messageType {
 	// case Connect:
 	// 	logger.Infof("[%s] 设备Register ", c.ID)

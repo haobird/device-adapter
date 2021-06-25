@@ -338,8 +338,10 @@ func (t *Things) business_handler_personVerification(body string) map[string]int
 			faceImage = info.FaceInfoList[0].FaceImage
 		}
 		respInfo = map[string]interface{}{
-			"persionID":   info.LibMatInfoList[0].MatchPersonID,
+			"persionID":   goutils.String(info.LibMatInfoList[0].MatchPersonID),
+			"personCode":  info.LibMatInfoList[0].MatchPersonInfo.PersonCode,
 			"persionName": info.LibMatInfoList[0].MatchPersonInfo.PersonName,
+			"identityNo":  info.LibMatInfoList[0].MatchPersonInfo.IdentityNo,
 			"openType":    "1",
 			"panoImage":   panoImage,
 			"faceImage":   faceImage,
@@ -395,6 +397,8 @@ func (t *Things) business_command_personAuthorized(buf []byte) string {
 	fmt.Println("打印请persionID：", persionID)
 
 	persionName := gjson.GetBytes(buf, "persionName").String()
+	persionCode := gjson.GetBytes(buf, "persionCode").String()
+	// identityNo := gjson.GetBytes(buf, "IdentityNo").String()
 	remark := gjson.GetBytes(buf, "remark").String()
 	imageList := gjson.GetBytes(buf, "imageList").Array()
 	timestamp := time.Now().Unix()
@@ -412,10 +416,11 @@ func (t *Things) business_command_personAuthorized(buf []byte) string {
 		imageArr = append(imageArr, temp)
 	}
 	type Info struct {
-		PersonID          string
-		LastChange        int64
-		PersonCode        string
-		PersonName        string
+		PersonID   string
+		LastChange int64
+		PersonCode string
+		PersonName string
+		// IdentityNo        string
 		Remarks           string
 		TimeTemplateNum   int
 		IdentificationNum int
@@ -423,10 +428,11 @@ func (t *Things) business_command_personAuthorized(buf []byte) string {
 		ImageList         []interface{}
 	}
 	var info = Info{
-		PersonID:          persionID,
-		LastChange:        timestamp,
-		PersonCode:        persionID,
-		PersonName:        persionName,
+		PersonID:   persionID,
+		LastChange: timestamp,
+		PersonCode: persionCode,
+		PersonName: persionName,
+		// IdentityNo:        identityNo,
 		Remarks:           remark,
 		TimeTemplateNum:   0,
 		IdentificationNum: 0,

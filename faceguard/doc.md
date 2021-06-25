@@ -72,7 +72,9 @@
     "key" : "210235C3R0320B000985",  // deviceCode 设备序列号
     "payload" : {
         "persionID" : "111",  // 住户id（注意设备支持 20位长度的字符）
+        "persionCode" : "111", // 人员编码，可填写学号或工号，长 度范围:[1, 15]
         "persionName" : "住户1", // 住户姓名
+        "identityNo" : "xxxxx", // 身份证号
         "openType": "1",  // 开门类型 1: 人脸开门
         "panoImage" : {
             "Name": "1564707615_1_86.jpg", 

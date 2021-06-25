@@ -106,7 +106,7 @@ func HandlerNotifyresult(action string, c *gin.Context) {
 	}
 
 	go ProcessPubackRaw(action, buf)
-	respondWithInfo(200, "success", nil, c)
+	respondWithInfo(0, "success", nil, c)
 
 }
 

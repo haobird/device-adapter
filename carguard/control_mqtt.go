@@ -58,9 +58,9 @@ func InitMQTTControl() *MQTTControl {
 	var option = config.Mqtt
 	// json.Unmarshal([]byte(config.Mqtt), &option)
 	logger.Info("mqtt配置为：", option)
-	clientid := option["clientid"]
+	clientid := option["clientID"]
 	salt, _ := goutils.GenShortID()
-	option["clientid"] = clientid + "_" + salt
+	option["clientID"] = clientid + "_" + salt
 	client, _ := NewMQTTClient(option)
 	return &MQTTControl{
 		conn: client,
@@ -73,7 +73,7 @@ var connectHandler mqtt.OnConnectHandler = func(client mqtt.Client) {
 
 var connectLostHandler mqtt.ConnectionLostHandler = func(client mqtt.Client, err error) {
 	logger.Debug("Connect lost: %v", err)
-	RetryConnect(client)
+	// RetryConnect(client)
 }
 
 var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {

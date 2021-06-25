@@ -1,5 +1,7 @@
 package bridge
 
+import "fmt"
+
 //Element publish elements
 type Element struct {
 	MessageType string `json:"message_type"` // 消息类型
@@ -19,10 +21,13 @@ type Bridge interface {
 func NewBridge(name string) Bridge {
 	switch name {
 	case "rabbitmq":
+		fmt.Println("NewBridge rabbitmq")
 		return InitBridgeMQ()
 	case "api":
+		fmt.Println("NewBridge api")
 		return InitApiMQ()
 	default:
+		fmt.Println("NewBridge mockMQ")
 		return &mockMQ{}
 	}
 }

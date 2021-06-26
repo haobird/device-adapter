@@ -21,7 +21,7 @@ services:
         volumes:
             - ./:/opt
         working_dir: /opt
-        command: go run face/main.go
+        command: go run bootface/main.go
         # command: ["/bin/sh", "-c", "while true;do echo hello docker;sleep 1;done"]
 
     park:
@@ -33,4 +33,15 @@ services:
         volumes:
             - ./:/opt
         working_dir: /opt
-        command: go run park/main.go
+        command: go run bootpark/main.go
+
+    camera:
+        image: golang:1.16-stretch
+        container_name: camera
+        restart: always
+        ports:
+            - "9085:9085"
+        volumes:
+            - ./:/opt
+        working_dir: /opt
+        command: go run bootcamera/main.go

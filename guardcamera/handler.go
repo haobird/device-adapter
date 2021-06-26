@@ -100,15 +100,19 @@ func FacesHandler(clientID string, buf []byte) {
 		object.ImageList = imageList
 		objectList = append(objectList, object)
 	}
-	// 处理发送或者打印
-	p, _ := json.Marshal(objectList)
+	// 单个发送，循环处理
+	for _, value := range objectList {
+		// 处理发送或者打印
+		p, _ := json.Marshal(value)
 
-	packet := Package{
-		MessageType: Publish,
-		RequestID:   "",
-		ClientID:    clientID,
-		Topic:       "faceShot",
-		Data:        p,
+		packet := Package{
+			MessageType: Publish,
+			RequestID:   "",
+			ClientID:    clientID,
+			Topic:       "faceShot",
+			Data:        p,
+		}
+		ProcessPublsih(packet)
 	}
-	ProcessPublsih(packet)
+
 }

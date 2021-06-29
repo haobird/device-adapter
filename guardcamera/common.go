@@ -83,7 +83,7 @@ func ReqHandler(action string, c *gin.Context) {
 func ProcessPublsih(packet Package) {
 	// 执行上报逻辑
 	ele := &bridge.Element{
-		MessageType: "cameradetection",
+		MessageType: "cameraguard",
 		RequestID:   packet.RequestID,
 		Timestamp:   goutils.Int64(packet.RequestID),
 		ClientID:    packet.ClientID,

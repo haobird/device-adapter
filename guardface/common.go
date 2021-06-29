@@ -49,9 +49,9 @@ func Init(cfgFile string) {
 
 // ProcessDeviceData 处理数据
 func ProcessRawData(c *Client, p []byte) {
-	str := string(p)
+	// str := string(p)
 	// 过滤掉图片数据
-	p = []byte(Tidy(str))
+	// p = []byte(Tidy(str))
 	logger.Debugf("client %s ProcessRawData %s", c.ID, string(p))
 
 	// 解析数据包

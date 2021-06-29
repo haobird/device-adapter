@@ -49,9 +49,9 @@ func Init(cfgFile string) {
 
 // ProcessPublsih 处理上行消息
 func ProcessPublsihRaw(action string, buf []byte) {
-	str := string(buf)
+	// str := string(buf)
 	// 过滤掉图片数据
-	buf = []byte(Tidy(str))
+	// buf = []byte(Tidy(str))
 	packet := things.ParsePublishData(action, buf)
 	messageType := packet.MessageType
 	clientID := packet.ClientID

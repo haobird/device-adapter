@@ -63,5 +63,5 @@ type FaceObject struct {
 	// SubImageList         interface{}
 	// RelatedType          string
 	// RelatedList          interface{}
-	ImageList []ImageInfo `json:"data"`
+	ImageList []ImageInfo `json:"imageList"`
 }

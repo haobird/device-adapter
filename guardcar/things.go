@@ -146,7 +146,7 @@ func (t *Things) registerHandler(str string) map[string]interface{} {
 func (t *Things) Packet_deviceStatus(flag int) *Package {
 	result := map[string]interface{}{
 		// "parkId":    "10000",
-		"online":    1,
+		"online":    flag,
 		"timestamp": time.Now().Unix(),
 	}
 

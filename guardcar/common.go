@@ -30,6 +30,19 @@ func Init(cfgFile string) {
 	// 加载 配置文件
 	config = LoadConfig(cfgFile)
 
+	// 格式化日志输出
+	logger.InitWithConfig(&logger.Cfg{
+		Writers:       config.Log.Writers,
+		Level:         config.Log.Level,
+		File:          config.Log.File,
+		FormatText:    config.Log.FormatText,
+		Color:         config.Log.Color,
+		RollingPolicy: config.Log.RollingPolicy,
+		RotateDate:    config.Log.RotateDate,
+		RotateSize:    config.Log.RotateSize,
+		BackupCount:   config.Log.BackupCount,
+	})
+
 	// 创建桥接
 	mybridge = bridge.NewBridge(config.Bridge)
 

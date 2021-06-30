@@ -11,5 +11,16 @@
         "username": "name",
         "password": "password",
         "topicPrefix" : "request_10000"
+    },
+    "log": {
+        "writers": "file,stdout",
+        "level": "debug",
+        "file": "./data/log/park.log",
+        "format_text": true,
+        "color": false,
+        "rolling_policy": "size",
+        "rotate_date": 1,
+        "rotate_size": 1,
+        "backup_count": 7
     }
 }

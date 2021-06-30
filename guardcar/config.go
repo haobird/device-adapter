@@ -15,6 +15,19 @@ type Config struct {
 	Bridge      string            `json:"bridge"`
 	ControlMode string            `json:"controlMode"`
 	Mqtt        map[string]string `json:"mqtt"`
+	Log         LogConf
+}
+
+type LogConf struct {
+	Writers       string `json:"writers"`        // file,stdout  # 文件和终端输出
+	Level         string `json:"level"`          // debug    # 报警等级
+	File          string `json:"file"`           // /data/log/lite.log
+	FormatText    bool   `json:"format_text"`    // false
+	Color         bool   `json:"color"`          // false
+	RollingPolicy string `json:"rolling_policy"` // size
+	RotateDate    int    `json:"rotate_date"`
+	RotateSize    int    `json:"rotate_size"`
+	BackupCount   int    `json:"backup_count"`
 }
 
 func LoadConfig(path string) *Config {

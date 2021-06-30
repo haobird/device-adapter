@@ -1,5 +1,16 @@
 {
     "httpAddr": ":9085",
     "logLevel" : "debug",
-    "bridge" : "api"
+    "bridge" : "api",
+    "log": {
+        "writers": "file,stdout",
+        "level": "debug",
+        "file": "./data/log/camera.log",
+        "format_text": true,
+        "color": false,
+        "rolling_policy": "size",
+        "rotate_date": 1,
+        "rotate_size": 1,
+        "backup_count": 7
+    }
 }

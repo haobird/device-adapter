@@ -36,8 +36,18 @@ func HeartHandler(c *Client) {
 
 // DisconnectHandler 断开
 func DisconnectHandler(c *Client) {
-	manager.DeleteClient(c.ID)
+	cid := c.ID
+	manager.DeleteClient(cid)
 	c.Close()
+
+	// 更新设备在线状态
+	packet := sdk.Packet_deviceStatus(0)
+	packet.ClientID = cid
+	msg := Message{
+		client: c,
+		packet: packet,
+	}
+	ProcessMessage(msg)
 }
 
 // PubAckHandler 设备响应的处理

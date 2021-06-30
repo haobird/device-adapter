@@ -142,6 +142,25 @@ func (t *Things) registerHandler(str string) map[string]interface{} {
 	return result
 }
 
+// 设备状态封包
+func (t *Things) Packet_deviceStatus(flag int) *Package {
+	result := map[string]interface{}{
+		// "parkId":    "10000",
+		"online":    1,
+		"timestamp": time.Now().Unix(),
+	}
+
+	buf, _ := json.Marshal(result)
+	packet := &Package{
+		MessageType: Publish,
+		RequestID:   "",
+		ClientID:    "",
+		Topic:       "deviceStatusCar",
+		Data:        buf,
+	}
+	return packet
+}
+
 func (t *Things) basicinfoHandler(str string) map[string]interface{} {
 	// 解析json数据
 	result := map[string]interface{}{

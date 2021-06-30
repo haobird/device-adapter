@@ -19,6 +19,7 @@ var (
 
 var (
 	mutex sync.RWMutex
+	cache *Cache
 )
 
 // 缓存结构

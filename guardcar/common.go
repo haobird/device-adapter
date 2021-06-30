@@ -22,7 +22,6 @@ var (
 	things   = &Things{}
 	msgChans = make(map[string]chan string)
 	control  Control
-	cache    *Cache
 )
 
 // 服务启动
@@ -91,6 +90,8 @@ func ProcessPublsihRaw(action string, buf []byte) {
 			// messageType = Heart
 		}
 	}
+
+	packet.ClientID = clientID
 
 	if messageType == Publish {
 		// 执行上报逻辑

@@ -18,7 +18,7 @@ func HeartHandler(clientID string) {
 
 // DisconnectHandler 断开
 func DisconnectHandler(clientID string) {
-	cache.Delete(clientID)
+	// cache.Delete(clientID)
 
 	// 更新设备在线状态
 	packet := things.Packet_deviceStatus(0)

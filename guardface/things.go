@@ -282,7 +282,7 @@ func (t *Things) ParseConnect(buf []byte) (string, error) {
 
 // 设备状态封包
 func (t *Things) Packet_deviceStatus(flag int) *Package {
-	result := t.business_handler_deviceStatus(1)
+	result := t.business_handler_deviceStatus(flag)
 	buf, _ := json.Marshal(result)
 	packet := &Package{
 		MessageType: Publish,

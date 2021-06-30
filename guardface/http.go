@@ -89,7 +89,7 @@ func AsyncReq(buf []byte) (int, string, error) {
 	// RespAuthorized(cli)
 	// return 2, "", err
 	// 经过sdk转换为设备可以识别的请求
-	buf, err = json.Marshal(input.Payload)
+	data, err := json.Marshal(input.Payload)
 	// fmt.Println("api接收到", string(buf))
 	// 生成消息 id
 	msgId := goutils.String(time.Now().Unix())
@@ -99,13 +99,13 @@ func AsyncReq(buf []byte) (int, string, error) {
 		Topic:     input.Topic,
 		RequestID: msgId,
 		ClientID:  input.Key,
-		Data:      buf,
+		Data:      data,
 	}
-	content := sdk.ProcessDataDown(packet)
+	str := sdk.ProcessDataDown(packet)
 	// fmt.Println(string(content))
 	// fmt.Println("字符串长度", len(string(content)))
 	// err = cli.Write([]byte(content))
-	ProcessCommand(cli, []byte(content))
+	ProcessCommand(cli, []byte(str))
 
 	if err != nil {
 		return 2, "", err
@@ -117,10 +117,15 @@ func AsyncReq(buf []byte) (int, string, error) {
 
 	// 循环读取 通道的响应，并增加超时退出
 	var code int = 0
-	var msg string
+	var content string
 	select {
-	case msg = <-ch:
+	case msg := <-ch:
 		fmt.Println("data from channel ", msgId)
+		// err = errors.New("success")
+		code = goutils.Int(gjson.Get(msg, "code").String())
+		message := gjson.Get(msg, "message").String()
+		content = gjson.Get(msg, "data").String()
+		err = errors.New(message)
 	// 如果把这个注释掉，则会阻塞 deadlock
 	case <-time.After(10 * time.Second):
 		fmt.Println("TimeOut")
@@ -133,5 +138,5 @@ func AsyncReq(buf []byte) (int, string, error) {
 	close(ch)
 
 	// 返回结果
-	return code, msg, err
+	return code, content, err
 }

@@ -130,23 +130,28 @@ func InitHTTP() {
 		}
 
 		code, content, err := AsyncReq(buf)
+		logger.Debug("[response]", "code:", code, " ,content:", content, " ,err: ", err)
+		if err != nil {
+			respondWithInfo(code, err.Error(), content, c)
+			return
+		}
 
-		// statusCode := gjson.Get(content, "Response.StatusCode").Int()
-		// if statusCode != 0 {
-		// 	statusString := gjson.Get(content, "Response.StatusString").String()
-		// 	respondWithInfo(int(statusCode), statusString, content, c)
-		// 	return
-		// }
+		statusCode := gjson.Get(content, "Response.StatusCode").Int()
+		if statusCode != 0 {
+			statusString := gjson.Get(content, "Response.StatusString").String()
+			respondWithInfo(int(statusCode), statusString, content, c)
+			return
+		}
 
-		// responseCode := gjson.Get(content, "Response.ResponseCode").Int()
-		// if responseCode != 0 {
-		// 	responseString := gjson.Get(content, "Response.ResponseString").String()
-		// 	respondWithInfo(int(responseCode), responseString, content, c)
-		// 	return
-		// }
+		responseCode := gjson.Get(content, "Response.ResponseCode").Int()
+		if responseCode != 0 {
+			responseString := gjson.Get(content, "Response.ResponseString").String()
+			respondWithInfo(int(responseCode), responseString, content, c)
+			return
+		}
 
-		// respondWithInfo(0, "success", string(content), c)
-		respondWithInfo(code, err.Error(), content, c)
+		respondWithInfo(0, "success", string(content), c)
+		// respondWithInfo(code, err.Error(), content, c)
 	})
 
 	httpAddr = config.HTTPAddr

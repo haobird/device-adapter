@@ -2,6 +2,7 @@ package guardcar
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"sync"
 	"time"
@@ -72,6 +73,7 @@ func (cache *Cache) Value(key string) (*CacheItem, error) {
 
 	if ok {
 		// Update access counter and timestamp.
+		fmt.Println("更新时间key:", key)
 		r.KeepAlive()
 		return r, nil
 	}

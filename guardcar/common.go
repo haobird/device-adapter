@@ -81,7 +81,7 @@ func ProcessPublsihRaw(action string, buf []byte) {
 		_, err := cache.Value(clientID)
 		if err != nil {
 			// 不存在，则添加缓存
-			cache.Add(clientID, 1*time.Minute, packet.Data)
+			cache.Add(clientID, 2*time.Minute, packet.Data)
 			// 基础数据上报
 			packet = things.ParsePublishData(Connect, buf)
 			messageType = Publish

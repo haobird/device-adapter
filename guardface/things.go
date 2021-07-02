@@ -333,9 +333,10 @@ func (t *Things) business_handler_personVerification(body string) map[string]int
 		libMatInfoNum := info.LibMatInfoNum
 		panoImage := Image{}
 		faceImage := Image{}
+		panoImage = info.FaceInfoList[0].PanoImage
+		faceImage = info.FaceInfoList[0].FaceImage
 		if libMatInfoNum == 1 {
-			panoImage = info.FaceInfoList[0].PanoImage
-			faceImage = info.FaceInfoList[0].FaceImage
+
 		}
 		respInfo = map[string]interface{}{
 			"persionID":   goutils.String(info.LibMatInfoList[0].MatchPersonID),

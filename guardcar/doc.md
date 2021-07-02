@@ -58,7 +58,7 @@
 ```
 {
     "topic" : "deviceStatusCar",
-    "deviceCode" : "1111",
+    "key" : "1111",
     "payload" : {
         "parkId": "10000",
         "online" : 0, // 0: 离线 ， 1: 在线
@@ -74,7 +74,7 @@
 ```
 {
     "topic" : "deviceInfoCar",
-    "deviceCode" : "1111",
+    "key" : "1111",
     "payload" : {
         "parkId" : "10000",
         "mac" : "xxxxxx",
@@ -90,7 +90,7 @@
 ```
 {
     "topic" : "plateVerification",
-    "deviceCode" : "1111",
+    "key" : "1111",
     "payload" : {
         "parkId": "10000",
         "recordId": "ec7ede33-6c91-4aee-9e6b-a859046b8c91",  // 记录id

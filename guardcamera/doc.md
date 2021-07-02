@@ -54,7 +54,7 @@ Status Code: 200 OK
 ```
 {
     "topic" : "deviceStatusCamera",
-    "deviceCode" : "34020000001320000002",
+    "key" : "34020000001320000002",
     "payload" : {
         "online" : 0, // 0: 离线 ， 1: 在线
         "timestamp" : 1564735558
@@ -68,7 +68,7 @@ Status Code: 200 OK
 ```
 {
     "topic" : "faceShot",
-    "deviceCode" : "34020000001320000002",
+    "key" : "34020000001320000002",
     "payload" : {
         "faceID": "111110220200710143217001770600178",  // 人脸标识
         "infoKind" : 1, // 信息分类：人工采集0/自动采集1

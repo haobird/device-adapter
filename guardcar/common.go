@@ -20,6 +20,7 @@ var (
 	mybridge bridge.Bridge
 	wpool    = fixpool.New(20) // 设备任务池
 	things   = &Things{}
+	lifeSpan = 30 // 单位 秒
 	msgChans = make(map[string]chan string)
 	control  Control
 )

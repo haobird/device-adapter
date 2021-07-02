@@ -19,7 +19,7 @@ var (
 	sdk      = &Things{}
 	msgChans = make(map[string]chan string)
 	mybridge bridge.Bridge
-	lifeSpan = 60              // 单位 秒
+	lifeSpan = 10              // 单位 秒
 	wpool    = fixpool.New(20) // 设备任务池
 	tpool    = fixpool.New(20) // 请求任务池
 )

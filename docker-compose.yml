@@ -1,47 +1,65 @@
-version: '3.1'
+version: "3.7"
+
+networks:
+  adapter-base-net:
+    driver: bridge
+
+volumes:
+  adapter-auth-db-volume:
+  adapter-mqtt-broker-volume:
+
 services:
-    # broker:
-    #     image: emqx/emqx
-    #     container_name: broker
-    #     restart: always
-    #     ports:
-    #         - "1883:1883"
-    #         - "8083:8083"
-    #         - "8883:8883"
-    #         - "8084:8084"
-    #         - "18083:18083"
+    vernemq:
+        image: vernemq/vernemq
+        container_name: adapter-vernemq
+        restart: on-failure
+        environment:
+            DOCKER_VERNEMQ_ALLOW_ANONYMOUS: "on"
+            DOCKER_VERNEMQ_LOG__CONSOLE__LEVEL: "error"
+        ports:
+            - "1883:1883"
+        networks:
+            - adapter-base-net
+        volumes:
+            - adapter-mqtt-broker-volume:/var/lib/vernemq
             
     face:
         image: golang:1.16-stretch
-        container_name: face
+        container_name: adapter-face
         restart: always
         ports:
             - "3570:3570"
             - "9081:9081"
+        networks:
+            - adapter-base-net
         volumes:
             - ./:/opt
         working_dir: /opt
-        command: go run bootface/main.go
+        command: go run boot/face/main.go
         # command: ["/bin/sh", "-c", "while true;do echo hello docker;sleep 1;done"]
 
-    park:
+    parking:
         image: golang:1.16-stretch
-        container_name: park
+        container_name: adapter-parking
         restart: always
         ports:
             - "9082:9082"
+        networks:
+            - adapter-base-net
         volumes:
             - ./:/opt
         working_dir: /opt
-        command: go run bootpark/main.go
+        command: go run boot/park/main.go
 
     camera:
         image: golang:1.16-stretch
-        container_name: camera
+        container_name: adapter-camera
         restart: always
         ports:
             - "9085:9085"
+        networks:
+            - adapter-base-net
         volumes:
             - ./:/opt
         working_dir: /opt
-        command: go run bootcamera/main.go
+        command: go run boot/camera/main.go

@@ -3,5 +3,5 @@ package main
 import "deviceadapter/guardcamera"
 
 func main() {
-	guardcamera.Init("bootcamera/config.json")
+	guardcamera.Init("boot/camera/config.json")
 }

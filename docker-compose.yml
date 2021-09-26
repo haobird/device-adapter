@@ -10,12 +10,14 @@ volumes:
 
 services:
     vernemq:
-        image: vernemq/vernemq
+        # image: vernemq/vernemq
+        build: docker/vernemq
         container_name: adapter-vernemq
         restart: on-failure
         environment:
             DOCKER_VERNEMQ_ALLOW_ANONYMOUS: "on"
             DOCKER_VERNEMQ_LOG__CONSOLE__LEVEL: "error"
+            DOCKER_VERNEMQ_ACCEPT_EULA: "yes"
         ports:
             - "1883:1883"
         networks:
@@ -49,7 +51,7 @@ services:
         volumes:
             - ./:/opt
         working_dir: /opt
-        command: go run boot/park/main.go
+        command: go run boot/parking/main.go
 
     camera:
         image: golang:1.16-stretch

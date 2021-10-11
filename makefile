@@ -44,6 +44,9 @@ emqx:
 latest: dockers
 	$(call docker_push,latest)
 
+# tag:
+# 	docker tag $(DOCKER_IMAGE_NAME_PREFIX)/$(DOCKER_SERVICE_NAME_PREFIX) $(DOCKER_IMAGE_NAME_PREFIX)/$(DOCKER_SERVICE_NAME_PREFIX)$$svc:$(version)
+
 # 发布
 release:
 	$(eval version = $(shell git describe --abbrev=0 --tags))
@@ -51,7 +54,7 @@ release:
 	# git checkout $(version)
 	$(MAKE) dockers
 	for svc in $(SERVICES); do \
-		docker tag $(DOCKER_IMAGE_NAME_PREFIX)/$$svc $(DOCKER_IMAGE_NAME_PREFIX)/$(DOCKER_SERVICE_NAME_PREFIX)$$svc:$(version); \
+		docker tag $(DOCKER_IMAGE_NAME_PREFIX)/$(DOCKER_SERVICE_NAME_PREFIX)$$svc $(DOCKER_IMAGE_NAME_PREFIX)/$(DOCKER_SERVICE_NAME_PREFIX)$$svc:$(version); \
 	done
 	$(call docker_push,$(version))
 

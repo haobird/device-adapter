@@ -2,6 +2,7 @@ package guardface
 
 import (
 	"bufio"
+	"errors"
 	"io"
 	"net"
 	"strconv"
@@ -43,7 +44,10 @@ func (p *ProtoConn) Read(b []byte) (n int, err error) {
 }
 
 func (p *ProtoConn) Write(b []byte) (n int, err error) {
-	return p.conn.Write(b)
+	if p.conn != nil {
+		return p.conn.Write(b)
+	}
+	return 0, errors.New("连接不存在")
 }
 
 func (p *ProtoConn) SetReadDeadline(t time.Time) error {

@@ -75,6 +75,10 @@ func handleConn(conn net.Conn) {
 	}
 
 	cid, err := sdk.ParseConnect(buf)
+	if err != nil {
+		logger.Error("ParseConnect error", err)
+		return
+	}
 	logger.Info("建立连接的设备编号为:", cid)
 
 	client := NewClient(cid, protocol)

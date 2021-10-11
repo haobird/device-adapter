@@ -29,10 +29,10 @@ define docker_push
 	done
 endef
 
-$(DOCKERS):
-	$(call make_docker,$(@),$(GOARCH))
+# $(DOCKERS):
+# 	$(call make_docker,$(@),$(GOARCH))
 
-dockers: $(DOCKERS)
+# dockers: $(DOCKERS)
 
 run:
 	docker-compose -f docker-compose.yml  up  --force-recreate --remove-orphans
@@ -63,3 +63,16 @@ vernemq:
 	docker build --tag=$(DOCKER_IMAGE_NAME_PREFIX)/vernemq -f docker/vernemq/Dockerfile .
 	docker push $(DOCKER_IMAGE_NAME_PREFIX)/vernemq:latest
 
+# 发布 face 镜像
+release_face:
+	$(eval version = v1.1.5)
+	$(eval svc = face)
+	docker build \
+		--no-cache \
+		--build-arg SVC=$(svc) \
+		--build-arg GOARCH=$(GOARCH) \
+		--build-arg GOARM=$(GOARM) \
+		--tag=$(DOCKER_IMAGE_NAME_PREFIX)/$(DOCKER_SERVICE_NAME_PREFIX)face:$(version) \
+		-f Dockerfile .
+	docker push $(DOCKER_IMAGE_NAME_PREFIX)/$(DOCKER_SERVICE_NAME_PREFIX)face:$(version)
+	
